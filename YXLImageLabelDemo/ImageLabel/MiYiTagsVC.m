@@ -112,7 +112,7 @@
     
     //    [self initTagUIAnimate:];
     
-    
+    [self addtagViewimageClickinit:CGPointZero isClick:NO];
 }
 /**
  *  mbp界面的动画
@@ -165,7 +165,7 @@
     MiYiTagSearchBarVC *vc =[[MiYiTagSearchBarVC alloc]init];
     vc.block=^(NSString *text)
     {
-        [self pop:text tagView:[self.tagArray lastObject]];
+        [self tagViewFrameText:text tagView:[self.tagArray lastObject]];
         MiYiTagView *tagView =(MiYiTagView *)[self.tagArray lastObject];
         [self tagViewPan:tagView point:tagView.center];
     };
@@ -177,39 +177,80 @@
     MiYiTagSearchBarVC *vc =[[MiYiTagSearchBarVC alloc]init];
     vc.block=^(NSString *text)
     {
-        [self pop:text tagView:[self.tagArray lastObject]];
+        [self tagViewFrameText:text tagView:[self.tagArray lastObject]];
         MiYiTagView *tagView =(MiYiTagView *)[self.tagArray lastObject];
         [self tagViewPan:tagView point:tagView.center];
     };
     [self.navigationController pushViewController:vc animated:YES];
 }
-
--(void)pop:(NSString *)text tagView:(MiYiTagView *)tageView
+/**
+ *  计算Frame
+ *
+ *  @param text     文本
+ *  @param tageView 标签
+ */
+-(void)tagViewFrameText:(NSString *)text tagView:(MiYiTagView *)tageView
 {
     MiYiTagView *tag =tageView;
     tag.isTagImageShow=NO;
+    
     CGSize size =[text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:Font(11),NSFontAttributeName, nil]];
     UIImage *image =[UIImage imageNamed:@"TagTapIcon"];
     UIImage *imageTag =[UIImage imageNamed:@"textTag"];
-    if (size.width < CGWidth(imageTag)-8) {
-        tag.frame=(CGRect){tag.frame.origin.x,tag.frame.origin.y,CGWidth(image)+3+ CGWidth(imageTag),tag.frame.size.height};
-        tag.waterflowImage.frame =(CGRect){tag.waterflowImage.frame.origin.x,tag.waterflowImage.frame.origin.y,CGWidth(imageTag),tag.waterflowImage.frame.size.height};
-        tag.waterflowImage.labelText.frame =(CGRect){tag.waterflowImage.labelText
-            .frame.origin.x,tag.waterflowImage.labelText
-            .frame.origin.y,CGWidth(imageTag)-8,tag.waterflowImage.labelText.frame.size.height};
-        tag.waterflowImage.image =[tag.waterflowImage.image resizableImageWithCapInsets:UIEdgeInsetsMake(3, 10, 3, 3)];
-        tag.waterflowImage.labelText.textAlignment=NSTextAlignmentCenter;
+    
+    if (tag.overturn) {
+        if (size.width < CGWidth(imageTag)-8) {
+            tag.frame=(CGRect){tag.frame.origin.x -(CGWidth(image)+3+ CGWidth(imageTag)),tag.frame.origin.y,CGWidth(image)+3+ CGWidth(imageTag),tag.frame.size.height};
+            tag.waterflowImage.frame =(CGRect){tag.waterflowImage.frame.origin.x,tag.waterflowImage.frame.origin.y,CGWidth(imageTag),tag.waterflowImage.frame.size.height};
+            tag.waterflowImage.labelText.frame =(CGRect){tag.waterflowImage.labelText
+                .frame.origin.x,tag.waterflowImage.labelText
+                .frame.origin.y,CGWidth(imageTag)-8,tag.waterflowImage.labelText.frame.size.height};
+            tag.waterflowImage.image =[tag.waterflowImage.image resizableImageWithCapInsets:UIEdgeInsetsMake(3, 3, 3, 10)];
+            tag.waterflowImage.labelText.textAlignment=NSTextAlignmentCenter;
+            
+        }else
+        {
+            CGFloat width = (size.width - ((CGWidth(tag.frame)-image.size.width)-8-3));
+            tag.frame=(CGRect){tag.frame.origin.x-(tag.frame.size.width+width),tag.frame.origin.y,tag.frame.size.width+width,tag.frame.size.height};
+            tag.waterflowImage.frame =(CGRect){tag.waterflowImage.frame.origin.x,tag.waterflowImage.frame.origin.y,tag.waterflowImage.frame.size.width+width,tag.waterflowImage.frame.size.height};
+            tag.waterflowImage.labelText.frame =(CGRect){tag.waterflowImage.labelText
+                .frame.origin.x,tag.waterflowImage.labelText
+                .frame.origin.y,tag.waterflowImage.labelText
+                .frame.size.width+width,tag.waterflowImage.labelText.frame.size.height};
+            tag.waterflowImage.image =[tag.waterflowImage.image resizableImageWithCapInsets:UIEdgeInsetsMake(3, 3, 3, 10)];
+            
+            tag.waterflowImage.labelText.textAlignment=NSTextAlignmentRight;
+            NSLog(@"%@",tag);
+        }
+        tag.overturn=YES;
+        
+        
+        
     }else
     {
-    CGFloat width = (size.width - ((CGWidth(tag.frame)-image.size.width)-8-3));
-    tag.frame=(CGRect){tag.frame.origin.x,tag.frame.origin.y,tag.frame.size.width+width,tag.frame.size.height};
-    tag.waterflowImage.frame =(CGRect){tag.waterflowImage.frame.origin.x,tag.waterflowImage.frame.origin.y,tag.waterflowImage.frame.size.width+width,tag.waterflowImage.frame.size.height};
-    tag.waterflowImage.labelText.frame =(CGRect){tag.waterflowImage.labelText
-        .frame.origin.x,tag.waterflowImage.labelText
-        .frame.origin.y,tag.waterflowImage.labelText
-        .frame.size.width+width,tag.waterflowImage.labelText.frame.size.height};
-    tag.waterflowImage.image =[tag.waterflowImage.image resizableImageWithCapInsets:UIEdgeInsetsMake(3, 10, 3, 3)];
-        tag.waterflowImage.labelText.textAlignment=NSTextAlignmentRight;
+        
+        
+        if (size.width < CGWidth(imageTag)-8) {
+            tag.frame=(CGRect){tag.frame.origin.x,tag.frame.origin.y,CGWidth(image)+3+ CGWidth(imageTag),tag.frame.size.height};
+            tag.waterflowImage.frame =(CGRect){tag.waterflowImage.frame.origin.x,tag.waterflowImage.frame.origin.y,CGWidth(imageTag),tag.waterflowImage.frame.size.height};
+            tag.waterflowImage.labelText.frame =(CGRect){tag.waterflowImage.labelText
+                .frame.origin.x,tag.waterflowImage.labelText
+                .frame.origin.y,CGWidth(imageTag)-8,tag.waterflowImage.labelText.frame.size.height};
+            tag.waterflowImage.image =[tag.waterflowImage.image resizableImageWithCapInsets:UIEdgeInsetsMake(3, 10, 3, 3)];
+            tag.waterflowImage.labelText.textAlignment=NSTextAlignmentCenter;
+        }else
+        {
+            CGFloat width = (size.width - ((CGWidth(tag.frame)-image.size.width)-8-3));
+            tag.frame=(CGRect){tag.frame.origin.x,tag.frame.origin.y,tag.frame.size.width+width,tag.frame.size.height};
+            tag.waterflowImage.frame =(CGRect){tag.waterflowImage.frame.origin.x,tag.waterflowImage.frame.origin.y,tag.waterflowImage.frame.size.width+width,tag.waterflowImage.frame.size.height};
+            tag.waterflowImage.labelText.frame =(CGRect){tag.waterflowImage.labelText
+                .frame.origin.x,tag.waterflowImage.labelText
+                .frame.origin.y,tag.waterflowImage.labelText
+                .frame.size.width+width,tag.waterflowImage.labelText.frame.size.height};
+            tag.waterflowImage.image =[tag.waterflowImage.image resizableImageWithCapInsets:UIEdgeInsetsMake(3, 10, 3, 3)];
+            tag.waterflowImage.labelText.textAlignment=NSTextAlignmentRight;
+        }
+        tag.overturn=NO;
     }
     tag.waterflowImage.labelText.text =text;
     [self initTagUIAnimate:NO];
@@ -221,20 +262,19 @@
 {
     CGPoint point = [sender locationInView:sender.view];
     
-    MiYiTagView *tagView =[self addtagViewimage:point];
-    [_imageTag addSubview:tagView];
-    [self.tagArray addObject:tagView];
-    _tagView=tagView;
-    [self initTagUIAnimate:YES];
+    [self addtagViewimageClickinit:point isClick:YES];;
+  
 }
 /**
- *  初始化一个标签
+ *  初始化标签
  *
- *  @param point 传入这个标签的位子
- *
- *  @return 返回这个标签
+ *  @param point   是点击添加的时候  传point point中心点与点击位子差半个标签尺寸所有加了半个尺寸的长度
+ 不是就为 CGPointZero
+ *  @param isClick 是点击添加YES   不是则NO
+ *  @param model   当isClick 为NO的时候需要传入数据
  */
--(MiYiTagView*)addtagViewimage:(CGPoint)point
+-(void)addtagViewimageClickinit:(CGPoint)point isClick:(BOOL)isClick
+                           //mode:(MiYiPostsImageTagIdsModel *)model
 {
     if (self.tagArray.count !=0) {
         MiYiTagView *tag =[self.tagArray lastObject];
@@ -245,9 +285,51 @@
     }
     
     MiYiTagView *tagView =[[MiYiTagView alloc]init];
-    _firstClick =CGPointMake(point.x +tagView.frame.size.width/2, point.y);
-    tagView.center=_firstClick;
-    tagView.isTagImageShow=YES;
+    
+    if (isClick) {
+        _firstClick =CGPointMake(point.x +tagView.frame.size.width/2, point.y);
+        tagView.center=_firstClick;
+        tagView.isTagImageShow=YES;
+    }else
+    {
+        //模拟数据
+        NSString *position = @"250.0000,30.000";
+        NSRange range = [position rangeOfString:@","];
+        CGFloat x =[[NSString stringWithFormat:@"%@",[position substringToIndex:range.location]] floatValue]*_imageScale;
+        CGFloat y =[[NSString stringWithFormat:@"%@",[position  substringFromIndex:range.location+1]]floatValue]*_imageScale;
+        NSString *tag_style =@"1";//0是正向   1是反向
+        NSString *tag_content =@"我是一个大傻逼";
+        if ([tag_style isEqualToString:@"0"]) {
+            [self tagViewFrameText:tag_content tagView:tagView];
+            tagView.frame =(CGRect){{x,y},tagView.frame.size};
+            
+        }else
+        {
+            tagView.overturn=YES;
+            [self tagViewFrameText:tag_content tagView:tagView];
+            tagView.frame =(CGRect){{x-CGWidth(tagView.frame),y},tagView.frame.size};
+            
+        }
+
+//        NSRange range = [model.tag_position rangeOfString:@","];
+//        CGFloat x =[[NSString stringWithFormat:@"%@",[model.tag_position substringToIndex:range.location]] floatValue]*_imageScale;
+//        CGFloat y =[[NSString stringWithFormat:@"%@",[model.tag_position substringFromIndex:range.location+1]]floatValue]*_imageScale;
+//        
+//        if ([model.tag_style isEqualToString:@"0"]) {
+//            [self tagViewFrameText:model.tag_content tagView:tagView];
+//            tagView.frame =(CGRect){{x,y},tagView.frame.size};
+//            
+//        }else
+//        {
+//            tagView.overturn=YES;
+//            [self tagViewFrameText:model.tag_content tagView:tagView];
+//            tagView.frame =(CGRect){{x-CGWidth(tagView.frame),y},tagView.frame.size};
+//            
+//        }
+        tagView.isTagImageShow=NO;
+    }
+    
+    
     UIPanGestureRecognizer *tagViewPan =[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(tagViewPanClick:)];
     tagViewPan.minimumNumberOfTouches=1;
     tagViewPan.maximumNumberOfTouches=1;
@@ -263,8 +345,10 @@
     [tagView addGestureRecognizer:tagViewLongPress];
     tagViewLongPress.delegate=self;
     
-    return tagView;
-
+    [_imageTag addSubview:tagView];
+    [self.tagArray addObject:tagView];
+    _tagView=tagView;
+    
 }
 /**
  *  标签pan手势
@@ -434,7 +518,7 @@
     MiYiTagSearchBarVC *vc =[[MiYiTagSearchBarVC alloc]init];
     vc.block=^(NSString *text)
     {
-        [self pop:text tagView:_tagView];
+        [self tagViewFrameText:text tagView:_tagView];
         [self tagViewPan:_tagView point:_tagView.center];
 
     };
