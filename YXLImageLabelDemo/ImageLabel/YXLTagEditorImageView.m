@@ -21,6 +21,7 @@
     UIImage *imageLabelIcon;
     CGFloat viewTagLeft;
     NSMutableArray *arrayInitDidView;
+    BOOL isViewDidLoad;
     
 }
 @end
@@ -151,7 +152,7 @@
 -(void)addTagViewText:(NSString *)text Location:(CGPoint )point isPositiveAndNegative:(BOOL)isPositiveAndNegative{
     [self addtagViewimageClickinit:point isAddTagView:YES];
     if(text.length!=0)
-    viewTag.imageLabel.labelWaterFlow.text=text;
+        viewTag.imageLabel.labelWaterFlow.text=text;
     [arrayInitDidView addObject:[NSString stringWithFormat:@"%d",isPositiveAndNegative]];
     
 }
@@ -159,8 +160,11 @@
 - (void)didMoveToWindow {
     [self layoutIfNeeded];
     if (self.window) {
-        for (int i=0; i<arrayInitDidView.count; i++) {
-            [self viewTagIsPositiveAndNegative:![arrayInitDidView[i] boolValue] view:arrayTagS[i]];
+        if(!isViewDidLoad){
+            isViewDidLoad=YES;
+            for (int i=0; i<arrayInitDidView.count; i++) {
+                [self viewTagIsPositiveAndNegative:![arrayInitDidView[i] boolValue] view:arrayTagS[i]];
+            }
         }
     }
 }
@@ -192,7 +196,7 @@
         make.width.greaterThanOrEqualTo(@(viewTagNew.imageLabel.image.size.width+8));
         make.height.equalTo(@(imageLabelIcon.size.height));
     }];
-
+    
     [arrayTagS addObject:viewTagNew];
     viewTag=viewTagNew;
     if (!isAdd) {
@@ -377,7 +381,7 @@
             viewTag.isPositiveAndNegative=YES;
             [ws correct:text isPositiveAndNegative:YES];
         }
-      
+        
     };
     [self.viewC.navigationController pushViewController:vc animated:YES];
 }
@@ -399,7 +403,7 @@
                 make.left.equalTo(@(CGOriginX(viewTag.frame)-(CGWidth(imageLabelIcon)+8+W)));
             }else{
                 make.left.equalTo(@(CGRectGetMaxX(viewTag.frame)-(CGWidth(imageLabelIcon)+8+W)));
-
+                
             }
             
         }];

@@ -63,4 +63,8 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+-(void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+}
 @end
