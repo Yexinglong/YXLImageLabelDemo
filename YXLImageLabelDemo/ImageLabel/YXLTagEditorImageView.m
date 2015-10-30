@@ -7,7 +7,6 @@
 //
 
 #import "YXLTagEditorImageView.h"
-#import "MiYiView.h"
 #import "YXLTagView.h"
 #import "MiYiTagSearchBarVC.h"
 @interface YXLTagEditorImageView ()<UIGestureRecognizerDelegate>
