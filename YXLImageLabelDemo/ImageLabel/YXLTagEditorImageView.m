@@ -178,14 +178,16 @@
         make.width.greaterThanOrEqualTo(@(viewTagNew.imageLabel.image.size.width+8));
         make.height.equalTo(@(imageLabelIcon.size.height));
     }];
-    [viewTagNew mas_updateConstraints:^(MASConstraintMaker *make) {
-        if (point.x+imageLabelIcon.size.width+8 >=kWindowWidth){
-            make.left.equalTo(@(kWindowWidth-(imageLabelIcon.size.width+8)));
-        }
-    }];
+//    [viewTagNew mas_updateConstraints:^(MASConstraintMaker *make) {
+//        if (point.x+imageLabelIcon.size.width+8 >=kWindowWidth){
+//            make.left.equalTo(@(kWindowWidth-(imageLabelIcon.size.width+8)));
+//        }
+//    }];
     [arrayTagS addObject:viewTagNew];
     viewTag=viewTagNew;
     [self mbpAnimation:YES];
+    
+    
 }
 
 
@@ -206,25 +208,7 @@
  */
 -(void)tapTagView:(UITapGestureRecognizer *)sender{
     viewTag =(YXLTagView *)sender.view;
-    if(viewTag.isPositiveAndNegative){
-        viewTag.isPositiveAndNegative=NO;
-        [viewTag mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(@(CGOriginX(viewTag.frame)+CGWidth(viewTag.frame)-8));
-            if (CGRectGetMaxX(viewTag.frame)+CGWidth(viewTag.frame)-8 >=kWindowWidth) {
-                make.left.equalTo(@(kWindowWidth-CGWidth(viewTag.frame)));
-            }
-        }];
-        
-    }else{
-        viewTag.isPositiveAndNegative=YES;
-        [viewTag mas_updateConstraints:^(MASConstraintMaker *make) {
-            NSLog(@"%f",CGWidth(viewTag.frame));
-            make.left.equalTo(@(CGOriginX(viewTag.frame)-CGWidth(viewTag.frame)+8));
-            if (CGOriginX(viewTag.frame)-CGWidth(viewTag.frame)+8<=0) {
-                make.left.equalTo(@0);
-            }
-        }];
-    }
+    [self viewTagIsPositiveAndNegative];
 }
 /**
  *  长按手势
@@ -248,11 +232,40 @@
  */
 -(void)clickimagePreviews:(UITapGestureRecognizer *)sender{
     CGPoint point = [sender locationInView:sender.view];
-    [self addtagViewimageClickinit:point];;
+    [self addtagViewimageClickinit:point];
 }
-
-
-#pragma -mark 
+-(void)viewTagIsPositiveAndNegative{
+    if(viewTag.isPositiveAndNegative){
+        viewTag.isPositiveAndNegative=NO;
+        [self positive];
+    }else{
+        viewTag.isPositiveAndNegative=YES;
+        [self negative];
+    }
+}
+/**
+ *  正向
+ */
+-(void)positive{
+    [viewTag mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(@(CGOriginX(viewTag.frame)+CGWidth(viewTag.frame)-8));
+        if (CGRectGetMaxX(viewTag.frame)+CGWidth(viewTag.frame)-8 >=kWindowWidth) {
+            make.left.equalTo(@(kWindowWidth-CGWidth(viewTag.frame)));
+        }
+    }];
+}
+/**
+ *  反向
+ */
+-(void)negative{
+    [viewTag mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(@(CGOriginX(viewTag.frame)-CGWidth(viewTag.frame)+8));
+        if (CGOriginX(viewTag.frame)-CGWidth(viewTag.frame)+8<=0) {
+            make.left.equalTo(@0);
+        }
+    }];
+}
+#pragma -mark
 /**
  *  编辑
  */
@@ -260,6 +273,25 @@
     MiYiTagSearchBarVC *vc =[[MiYiTagSearchBarVC alloc]init];
     vc.block=^(NSString *text){
         viewTag.imageLabel.labelWaterFlow.text=text;
+        [viewTag mas_updateConstraints:^(MASConstraintMaker *make) {
+            CGSize size =[text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:Font(11),NSFontAttributeName, nil]];
+            CGFloat W;
+            if (CGWidth(imageLabelIcon)-15 > size.width) {
+                W=0;
+            }else{
+                W=size.width-(CGWidth(imageLabelIcon)-15);
+            }
+            if(viewTag.isPositiveAndNegative){
+                if (CGRectGetMaxX(viewTag.frame)-(CGWidth(imageLabelIcon)+8+W)<=0) {
+                    make.left.equalTo(@0);
+                }
+            }else{
+                if (CGRectGetMaxX(viewTag.frame) >=kWindowWidth) {
+                    make.left.equalTo(@(kWindowWidth-(CGWidth(imageLabelIcon)+8+W)));
+                }
+                
+            }
+        }];
     };
     [self.viewC.navigationController pushViewController:vc animated:YES];
 }
@@ -275,6 +307,7 @@
         }
     }
 }
+
 /**
  *  pan手势  标签移动
  */
@@ -306,24 +339,59 @@
 
 -(void)clickButtonOne{
     MiYiTagSearchBarVC *vc =[[MiYiTagSearchBarVC alloc]init];
+    __weak YXLTagEditorImageView *ws =self;
     vc.block=^(NSString *text){
         viewTag.imageLabel.labelWaterFlow.text=text;
         viewTag.isImageLabelShow=YES;
         [self clickViewMBP];
+        if (CGRectGetMaxX(viewTag.frame) >=kWindowWidth){
+            viewTag.isPositiveAndNegative=YES;
+            [ws correct:text isPositiveAndNegative:YES];
+        }
     };
     [self.viewC.navigationController pushViewController:vc animated:YES];
 }
 
 -(void)clickButtonTwo{
     MiYiTagSearchBarVC *vc =[[MiYiTagSearchBarVC alloc]init];
+    __weak YXLTagEditorImageView *ws =self;
     vc.block=^(NSString *text){
         viewTag.imageLabel.labelWaterFlow.text=text;
         viewTag.isImageLabelShow=YES;
         [self clickViewMBP];
+        if (CGRectGetMaxX(viewTag.frame) >=kWindowWidth){
+            viewTag.isPositiveAndNegative=YES;
+            [ws correct:text isPositiveAndNegative:YES];
+        }
+      
     };
     [self.viewC.navigationController pushViewController:vc animated:YES];
 }
+/**
+ *  修正
+ */
+-(void)correct:(NSString *)text isPositiveAndNegative:(BOOL)isPositiveAndNegative{
+    CGSize size =[text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:Font(11),NSFontAttributeName, nil]];
+    CGFloat W;
+    if (CGWidth(imageLabelIcon)-15 > size.width) {
+        W=0;
+    }else{
+        W=size.width-(CGWidth(imageLabelIcon)-15);
+    }
+    if (CGRectGetMaxX(viewTag.frame) >=kWindowWidth) {
+        [viewTag mas_updateConstraints:^(MASConstraintMaker *make) {
+            if (isPositiveAndNegative) {
+                
+                make.left.equalTo(@(CGOriginX(viewTag.frame)-(CGWidth(imageLabelIcon)+8+W)));
+            }else{
+                make.left.equalTo(@(CGRectGetMaxX(viewTag.frame)-(CGWidth(imageLabelIcon)+8+W)));
 
+            }
+            
+        }];
+    }
+    
+}
 #pragma -mark 初始化
 -(UIImageView *)getimagePreviews{
     UIImageView *image =[UIImageView new];

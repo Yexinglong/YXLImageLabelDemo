@@ -125,6 +125,7 @@
     [self mas_updateConstraints:^(MASConstraintMaker *make) {
         make.width.greaterThanOrEqualTo(@(CGWidth(imageLabelIcon)+8+W));
         if(isPositiveAndNegative){
+            make.left.equalTo(@(CGRectGetMaxX(self.frame)-(CGWidth(imageLabelIcon)+8+W)));
             UIImage *image =[UIImage imageNamed:@"textTagAnti"];
             _imageLabel.image=[image resizableImageWithCapInsets:UIEdgeInsetsMake(3, 3, 3, 9)];
             [_imageLabel mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -196,4 +197,10 @@
 {
     return YES;
 };
+
+-(void)dealloc
+{
+    [_imageLabel.labelWaterFlow removeObserver:self
+                           forKeyPath:@"text"];
+}
 @end
