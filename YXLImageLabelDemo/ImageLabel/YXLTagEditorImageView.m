@@ -20,6 +20,7 @@
     CGFloat imageScale;
     UIImage *imageLabelIcon;
     CGFloat viewTagLeft;
+    NSMutableArray *arrayInitDidView;
     
 }
 @end
@@ -29,6 +30,7 @@
 -(id)initWithImage:(UIImage *)image{
     self =[super init];
     if (self) {
+        arrayInitDidView= [NSMutableArray array];
         imageLabelIcon =[UIImage imageNamed:@"textTag"];
         arrayTagS =[NSMutableArray array];
         _imagePreviews =[self getimagePreviews];
@@ -54,13 +56,15 @@
         if (arrayTagS==nil) {
             arrayTagS =[NSMutableArray array];
         }
+        if (arrayInitDidView==nil) {
+            arrayInitDidView= [NSMutableArray array];
+        }
         if (_imagePreviews==nil) {
             _imagePreviews =[self getimagePreviews];
             _imagePreviews.userInteractionEnabled=YES;
             [self addSubview:_imagePreviews];
             [self initTagUI];
         }
-        
     }
     return self;
 }
@@ -145,14 +149,24 @@
 #pragma -mark 添加已知标签
 
 -(void)addTagViewText:(NSString *)text Location:(CGPoint )point isPositiveAndNegative:(BOOL)isPositiveAndNegative{
-    [self addtagViewimageClickinit:point];
+    [self addtagViewimageClickinit:point isAddTagView:YES];
     if(text.length!=0)
     viewTag.imageLabel.labelWaterFlow.text=text;
-    viewTag.isPositiveAndNegative=isPositiveAndNegative;
+    [arrayInitDidView addObject:[NSString stringWithFormat:@"%d",isPositiveAndNegative]];
+    
+}
+
+- (void)didMoveToWindow {
+    [self layoutIfNeeded];
+    if (self.window) {
+        for (int i=0; i<arrayInitDidView.count; i++) {
+            [self viewTagIsPositiveAndNegative:![arrayInitDidView[i] boolValue] view:arrayTagS[i]];
+        }
+    }
 }
 
 #pragma -mark 点击创建标签
--(void)addtagViewimageClickinit:(CGPoint)point{
+-(void)addtagViewimageClickinit:(CGPoint)point isAddTagView:(BOOL)isAdd{
     YXLTagView *viewTagNew =[[YXLTagView alloc]init];
     UIPanGestureRecognizer *panTagView =[[UIPanGestureRecognizer alloc]initWithTarget:self action:@selector(panTagView:)];
     panTagView.minimumNumberOfTouches=1;
@@ -178,14 +192,14 @@
         make.width.greaterThanOrEqualTo(@(viewTagNew.imageLabel.image.size.width+8));
         make.height.equalTo(@(imageLabelIcon.size.height));
     }];
-//    [viewTagNew mas_updateConstraints:^(MASConstraintMaker *make) {
-//        if (point.x+imageLabelIcon.size.width+8 >=kWindowWidth){
-//            make.left.equalTo(@(kWindowWidth-(imageLabelIcon.size.width+8)));
-//        }
-//    }];
+
     [arrayTagS addObject:viewTagNew];
     viewTag=viewTagNew;
-    [self mbpAnimation:YES];
+    if (!isAdd) {
+        [self mbpAnimation:YES];
+    }else{
+        viewTagNew.isImageLabelShow=YES;
+    }
     
     
 }
@@ -208,7 +222,7 @@
  */
 -(void)tapTagView:(UITapGestureRecognizer *)sender{
     viewTag =(YXLTagView *)sender.view;
-    [self viewTagIsPositiveAndNegative];
+    [self viewTagIsPositiveAndNegative:viewTag.isPositiveAndNegative view:viewTag];
 }
 /**
  *  长按手势
@@ -232,35 +246,35 @@
  */
 -(void)clickimagePreviews:(UITapGestureRecognizer *)sender{
     CGPoint point = [sender locationInView:sender.view];
-    [self addtagViewimageClickinit:point];
+    [self addtagViewimageClickinit:point isAddTagView:NO];
 }
--(void)viewTagIsPositiveAndNegative{
-    if(viewTag.isPositiveAndNegative){
-        viewTag.isPositiveAndNegative=NO;
-        [self positive];
+-(void)viewTagIsPositiveAndNegative:(BOOL)isPositiveAndNegative view:(YXLTagView *)view{
+    if(isPositiveAndNegative){
+        view.isPositiveAndNegative=NO;
+        [self positive:view];
     }else{
-        viewTag.isPositiveAndNegative=YES;
-        [self negative];
+        view.isPositiveAndNegative=YES;
+        [self negative:view];
     }
 }
 /**
  *  正向
  */
--(void)positive{
-    [viewTag mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(@(CGOriginX(viewTag.frame)+CGWidth(viewTag.frame)-8));
-        if (CGRectGetMaxX(viewTag.frame)+CGWidth(viewTag.frame)-8 >=kWindowWidth) {
-            make.left.equalTo(@(kWindowWidth-CGWidth(viewTag.frame)));
+-(void)positive:(YXLTagView *)view{
+    [view mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(@(CGOriginX(view.frame)+CGWidth(view.frame)-8));
+        if (CGRectGetMaxX(view.frame)+CGWidth(view.frame)-8 >=kWindowWidth) {
+            make.left.equalTo(@(kWindowWidth-CGWidth(view.frame)));
         }
     }];
 }
 /**
  *  反向
  */
--(void)negative{
-    [viewTag mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(@(CGOriginX(viewTag.frame)-CGWidth(viewTag.frame)+8));
-        if (CGOriginX(viewTag.frame)-CGWidth(viewTag.frame)+8<=0) {
+-(void)negative:(YXLTagView *)view{
+    [view mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(@(CGOriginX(view.frame)-CGWidth(view.frame)+8));
+        if (CGOriginX(view.frame)-CGWidth(view.frame)+8<=0) {
             make.left.equalTo(@0);
         }
     }];
