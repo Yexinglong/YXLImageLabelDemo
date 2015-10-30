@@ -10,6 +10,7 @@
 #import "NSTimer+Addition.h"
 @interface YXLTagView ()
 {
+    UIImage *imageLabelIcon;
     NSTimer *timerAnimation;
     UIView *viewSpread;
     UIView *viewTapDot;
@@ -23,6 +24,7 @@
 {
     self =[super init];
     if (self) {
+        imageLabelIcon=[UIImage imageNamed:@"textTag"];
         timerAnimation =[NSTimer scheduledTimerWithTimeInterval:3
                                                               target:self
                                                             selector:@selector(animationTimerDidFired)
@@ -72,24 +74,17 @@
 #pragma -mark KVO
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if ([object isEqual:_imageLabel.labelWaterFlow] && [keyPath isEqualToString:@"text"]) {
-        [self mas_updateConstraints:^(MASConstraintMaker *make) {
-            CGSize size =[_imageLabel.labelWaterFlow.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:Font(11),NSFontAttributeName, nil]];
-            CGFloat W;
-            if (CGWidth(_imageLabel.frame)-15 > size.width) {
-                W=0;
-            }else{
-                W=size.width-(CGWidth(_imageLabel.frame)-15);
-            }
+       
             if (_isPositiveAndNegative) {
                 UIImage *image =[UIImage imageNamed:@"textTagAnti"];
                 _imageLabel.image=[image resizableImageWithCapInsets:UIEdgeInsetsMake(3, 3, 3, 9)];
+                [self setIsPositiveAndNegative:YES];
             }else{
                 UIImage *image =[UIImage imageNamed:@"textTag"];
                 _imageLabel.image=[image resizableImageWithCapInsets:UIEdgeInsetsMake(3, 9, 3, 3)];
+                [self setIsPositiveAndNegative:NO];
             }
 
-            make.width.greaterThanOrEqualTo(@(CGWidth(_imageLabel.frame)+8+W));
-        }];
     }
 }
 
@@ -119,37 +114,50 @@
 
 -(void)setIsPositiveAndNegative:(BOOL)isPositiveAndNegative{
     _isPositiveAndNegative=isPositiveAndNegative;
-    if(isPositiveAndNegative){
-        UIImage *image =[UIImage imageNamed:@"textTagAnti"];
-        _imageLabel.image=[image resizableImageWithCapInsets:UIEdgeInsetsMake(3, 3, 3, 9)];
-        [_imageLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(@0);
-        }];
-       [_imageLabel.labelWaterFlow mas_updateConstraints:^(MASConstraintMaker *make) {
-           make.edges.equalTo(_imageLabel).insets(UIEdgeInsetsMake(0, 5, 0, 10));
-       }];
-        [viewSpread mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(@(CGWidth(_imageLabel.frame)+0.5));
-        }];
-        [viewTapDot mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(@(CGWidth(_imageLabel.frame)+0.5));
-        }];
+    
+    CGSize size =[_imageLabel.labelWaterFlow.text sizeWithAttributes:[NSDictionary dictionaryWithObjectsAndKeys:Font(11),NSFontAttributeName, nil]];
+    CGFloat W;
+    if (CGWidth(imageLabelIcon)-15 > size.width) {
+        W=0;
     }else{
-        UIImage *image =[UIImage imageNamed:@"textTag"];
-        _imageLabel.image=[image resizableImageWithCapInsets:UIEdgeInsetsMake(3, 9, 3, 3)];
-        [_imageLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(@8);
-        }];
-        [_imageLabel.labelWaterFlow mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(_imageLabel).insets(UIEdgeInsetsMake(0, 10, 0, 5));
-        }];
-        [viewSpread mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(@0);
-        }];
-        [viewTapDot mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(@0);
-        }];
+        W=size.width-(CGWidth(imageLabelIcon)-15);
     }
+    [self mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.width.greaterThanOrEqualTo(@(CGWidth(imageLabelIcon)+8+W));
+        if(isPositiveAndNegative){
+            UIImage *image =[UIImage imageNamed:@"textTagAnti"];
+            _imageLabel.image=[image resizableImageWithCapInsets:UIEdgeInsetsMake(3, 3, 3, 9)];
+            [_imageLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(@0);
+            }];
+            [_imageLabel.labelWaterFlow mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.edges.equalTo(_imageLabel).insets(UIEdgeInsetsMake(0, 5, 0, 10));
+            }];
+            [viewSpread mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(@(CGWidth(imageLabelIcon)+W+0.5));
+            }];
+            [viewTapDot mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(@(CGWidth(imageLabelIcon)+W+0.5));
+            }];
+        }else{
+            UIImage *image =[UIImage imageNamed:@"textTag"];
+            _imageLabel.image=[image resizableImageWithCapInsets:UIEdgeInsetsMake(3, 9, 3, 3)];
+            [_imageLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(@8);
+            }];
+            [_imageLabel.labelWaterFlow mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.edges.equalTo(_imageLabel).insets(UIEdgeInsetsMake(0, 10, 0, 5));
+            }];
+            [viewSpread mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(@0);
+            }];
+            [viewTapDot mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(@0);
+            }];
+        }
+
+    }];
+
 }
 
 -(void)setIsImageLabelShow:(BOOL)isImageLabelShow{
