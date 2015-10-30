@@ -7,7 +7,7 @@
 //
 
 #import "ViewController.h"
-#import "MiYiTagsVC.h"
+#import "YXLTagVC.h"
 #import "pch.h"
 @interface ViewController ()
 
@@ -24,7 +24,7 @@
     self.view .backgroundColor =HEX_COLOR_VIEW_BACKGROUND;
 
     
-    UILabel *   labbel =[[UILabel alloc]initWithFrame:(CGRect){0,100,kWindowWidth,kWindowHeight-100}];
+    UILabel *labbel =[[UILabel alloc]initWithFrame:(CGRect){0,100,kWindowWidth,kWindowHeight-100}];
     labbel.numberOfLines=0;
     labbel.font=Font(15);
     labbel.text=@"这里是显示回调的信息";
@@ -42,11 +42,10 @@
     
     // Do any additional setup after loading the view, typically from a nib.
 }
--(void)btnClick
-{
+-(void)btnClick{
     __weak ViewController *weakSelf =self;
-    MiYiTagsVC *tagView =[[MiYiTagsVC alloc]init];
-    tagView.blockUI=^(NSString *string){
+    YXLTagVC *tagView =[[YXLTagVC alloc]init];
+    tagView.popBlock=^(NSString *string){
         weakSelf.labbel.text=string;
     };
     [self.navigationController pushViewController:tagView animated:YES];

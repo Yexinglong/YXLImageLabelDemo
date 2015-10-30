@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "Masonry.h"
 
 @interface pch : NSObject
 // 细字体
@@ -39,5 +40,7 @@
 #define kScreenBounds [[UIScreen                          mainScreen]bounds]
 #define kWindowWidth  ([[UIScreen mainScreen]             bounds].size.width)
 #define kWindowHeight ([[UIScreen mainScreen]             bounds].size.height)
+
+
 
 @end
