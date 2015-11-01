@@ -48,12 +48,12 @@
     NSMutableArray *array =[tagEditorImageView popTagModel];
     NSMutableArray *array1 =[NSMutableArray array];
     for(NSDictionary *dic in array){
-        BOOL is =dic[@"positiveAndNegative"];
+        BOOL is =[dic[@"positiveAndNegative"] boolValue];
         NSString *positiveAndNegative ;
         if (is) {
-            positiveAndNegative=@"正";
-        }else{
             positiveAndNegative=@"反";
+        }else{
+            positiveAndNegative=@"正";
         }
         NSString *string =[NSString stringWithFormat:@"方向%@坐标%@文本%@",positiveAndNegative,dic[@"point"],dic[@"text"]];
         [array1 addObject:string];
