@@ -477,6 +477,7 @@
         point =[NSString stringWithFormat:@"%f,%f",CGOriginX(tag.frame)/imageScale,CGOriginY(tag.frame)/imageScale];
         if(tag.isPositiveAndNegative ==YES){
             positiveAndNegative =@"1";
+            point =[NSString stringWithFormat:@"%f,%f",CGRectGetMaxX(tag.frame)/imageScale,CGOriginY(tag.frame)/imageScale];
         }
         NSDictionary *dic=@{@"positiveAndNegative":positiveAndNegative,@"point":point,@"text":tag.imageLabel.labelWaterFlow.text};
         [array addObject:dic];
