@@ -34,7 +34,7 @@
     [tagEditorImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);
     }];
-    [tagEditorImageView addTagViewText:@"哈哈哈哈" Location:CGPointMake(100, 100) isPositiveAndNegative:YES];
+    [tagEditorImageView addTagViewText:@"哈哈哈哈" Location:CGPointMake(200, 100) isPositiveAndNegative:YES];
     [tagEditorImageView addTagViewText:@"哈哈lalallallal" Location:CGPointMake(200, 150) isPositiveAndNegative:NO];
     UIBarButtonItem *item =[[UIBarButtonItem alloc]initWithTitle:@"确定" style:UIBarButtonItemStylePlain target:self action:@selector(navItemClick)];
     self.navigationItem.rightBarButtonItem=item;
@@ -45,7 +45,12 @@
 // *  确定并pop    返回这个图片所有的标签地址内容，是否翻转样式的数组   坐标为这个图片的真实坐标
 // */
 -(void)navItemClick{
+    
     NSMutableArray *array =[tagEditorImageView popTagModel];
+    if (array.count==0) {
+        [self.navigationController popViewControllerAnimated:YES];
+        return;
+    }
     NSMutableArray *array1 =[NSMutableArray array];
     for(NSDictionary *dic in array){
         BOOL is =[dic[@"positiveAndNegative"] boolValue];

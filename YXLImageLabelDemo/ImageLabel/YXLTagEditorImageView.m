@@ -150,7 +150,8 @@
 #pragma -mark 添加已知标签
 
 -(void)addTagViewText:(NSString *)text Location:(CGPoint )point isPositiveAndNegative:(BOOL)isPositiveAndNegative{
-    [self addtagViewimageClickinit:point isAddTagView:YES];
+    CGPoint pointimageScale =CGPointMake(point.x*imageScale, point.y*imageScale);
+    [self addtagViewimageClickinit:pointimageScale isAddTagView:YES];
     if(text.length!=0)
         viewTag.imageLabel.labelWaterFlow.text=text;
     [arrayInitDidView addObject:[NSString stringWithFormat:@"%d",isPositiveAndNegative]];
@@ -399,7 +400,6 @@
     if (CGRectGetMaxX(viewTag.frame) >=kWindowWidth) {
         [viewTag mas_updateConstraints:^(MASConstraintMaker *make) {
             if (isPositiveAndNegative) {
-                
                 make.left.equalTo(@(CGOriginX(viewTag.frame)-(CGWidth(imageLabelIcon)+8+W)));
             }else{
                 make.left.equalTo(@(CGRectGetMaxX(viewTag.frame)-(CGWidth(imageLabelIcon)+8+W)));
@@ -408,8 +408,8 @@
             
         }];
     }
-    
 }
+
 #pragma -mark 初始化
 -(UIImageView *)getimagePreviews{
     UIImageView *image =[UIImageView new];
@@ -463,12 +463,20 @@
     NSMutableArray *array =[NSMutableArray array];
     NSString *positiveAndNegative;
     NSString *point;
+    if (viewCover.alpha==1) {
+        if (arrayTagS.count !=0) {
+            YXLTagView *tag =[arrayTagS lastObject];
+            if (!tag.isImageLabelShow) {
+                [tag removeFromSuperview];
+                [arrayTagS removeLastObject];
+            }
+        }
+    }
     for (YXLTagView *tag in arrayTagS) {
         positiveAndNegative =@"0";
         point =[NSString stringWithFormat:@"%f,%f",CGOriginX(tag.frame)/imageScale,CGOriginY(tag.frame)/imageScale];
         if(tag.isPositiveAndNegative ==YES){
             positiveAndNegative =@"1";
-            point =[NSString stringWithFormat:@"%f,%f",CGRectGetMaxX(tag.frame)/imageScale,CGOriginY(tag.frame)/imageScale];
         }
         NSDictionary *dic=@{@"positiveAndNegative":positiveAndNegative,@"point":point,@"text":tag.imageLabel.labelWaterFlow.text};
         [array addObject:dic];
