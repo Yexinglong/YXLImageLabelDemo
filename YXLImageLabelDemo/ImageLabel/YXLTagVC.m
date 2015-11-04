@@ -34,8 +34,8 @@
     [tagEditorImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.edges.equalTo(self.view);
     }];
-    [tagEditorImageView addTagViewText:@"哈哈哈哈" Location:CGPointMake(200, 100) isPositiveAndNegative:YES];
-    [tagEditorImageView addTagViewText:@"哈哈lalallallal" Location:CGPointMake(200, 150) isPositiveAndNegative:NO];
+    [tagEditorImageView addTagViewText:@"哈哈哈哈" Location:CGPointMake(448.309179,296.296296) isPositiveAndNegative:YES];
+    [tagEditorImageView addTagViewText:@"哈哈lalallallal" Location:CGPointMake(430.917874, 295.652174) isPositiveAndNegative:NO];
     UIBarButtonItem *item =[[UIBarButtonItem alloc]initWithTitle:@"确定" style:UIBarButtonItemStylePlain target:self action:@selector(navItemClick)];
     self.navigationItem.rightBarButtonItem=item;
     

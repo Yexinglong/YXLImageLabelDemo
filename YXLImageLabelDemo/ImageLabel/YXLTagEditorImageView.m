@@ -150,7 +150,13 @@
 #pragma -mark 添加已知标签
 
 -(void)addTagViewText:(NSString *)text Location:(CGPoint )point isPositiveAndNegative:(BOOL)isPositiveAndNegative{
-    CGPoint pointimageScale =CGPointMake(point.x*imageScale, point.y*imageScale);
+    CGFloat X;
+    if (isPositiveAndNegative) {
+        X = point.x*imageScale-8;
+    }else{
+        X = point.x*imageScale;
+    }
+    CGPoint pointimageScale =CGPointMake(X, point.y*imageScale+imageLabelIcon.size.height/2);
     [self addtagViewimageClickinit:pointimageScale isAddTagView:YES];
     if(text.length!=0)
         viewTag.imageLabel.labelWaterFlow.text=text;
@@ -164,6 +170,11 @@
         if(!isViewDidLoad){
             isViewDidLoad=YES;
             for (int i=0; i<arrayInitDidView.count; i++) {
+                NSLog(@"%d",![arrayInitDidView[i] boolValue]);
+                if(![arrayInitDidView[i] boolValue]==YES)
+                {
+                    break;
+                }
                 [self viewTagIsPositiveAndNegative:![arrayInitDidView[i] boolValue] view:arrayTagS[i]];
             }
         }
