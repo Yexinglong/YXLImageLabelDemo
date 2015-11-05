@@ -374,10 +374,8 @@
         viewTag.imageLabel.labelWaterFlow.text=text;
         viewTag.isImageLabelShow=YES;
         [self clickViewMBP];
-        if (CGRectGetMaxX(viewTag.frame) >=kWindowWidth){
-            viewTag.isPositiveAndNegative=YES;
-            [ws correct:text isPositiveAndNegative:YES];
-        }
+        
+        [ws correct:text isPositiveAndNegative:YES];
     };
     [self.viewC.navigationController pushViewController:vc animated:YES];
 }
@@ -389,10 +387,9 @@
         viewTag.imageLabel.labelWaterFlow.text=text;
         viewTag.isImageLabelShow=YES;
         [self clickViewMBP];
-        if (CGRectGetMaxX(viewTag.frame) >=kWindowWidth){
-            viewTag.isPositiveAndNegative=YES;
-            [ws correct:text isPositiveAndNegative:YES];
-        }
+      
+        [ws correct:text isPositiveAndNegative:YES];
+        
         
     };
     [self.viewC.navigationController pushViewController:vc animated:YES];
@@ -408,9 +405,11 @@
     }else{
         W=size.width-(CGWidth(imageLabelIcon)-15);
     }
-    if (CGRectGetMaxX(viewTag.frame) >=kWindowWidth) {
+    
+    if (CGOriginX(viewTag.frame)+(CGWidth(imageLabelIcon)+8+W) >=kWindowWidth) {
         [viewTag mas_updateConstraints:^(MASConstraintMaker *make) {
             if (isPositiveAndNegative) {
+                viewTag.isPositiveAndNegative=YES;
                 make.left.equalTo(@(CGOriginX(viewTag.frame)-(CGWidth(imageLabelIcon)+8+W)));
             }else{
                 make.left.equalTo(@(CGRectGetMaxX(viewTag.frame)-(CGWidth(imageLabelIcon)+8+W)));
