@@ -301,6 +301,7 @@
  */
 -(void)menuItem1Pressed{
     MiYiTagSearchBarVC *vc =[[MiYiTagSearchBarVC alloc]init];
+    __weak YXLTagEditorImageView *ws =self;
     vc.block=^(NSString *text){
         viewTag.imageLabel.labelWaterFlow.text=text;
         [viewTag mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -319,8 +320,9 @@
                 if (CGRectGetMaxX(viewTag.frame) >=kWindowWidth) {
                     make.left.equalTo(@(kWindowWidth-(CGWidth(imageLabelIcon)+8+W)));
                 }
-                
             }
+            [ws correct:text isPositiveAndNegative:YES];
+
         }];
     };
     [self.viewC.navigationController pushViewController:vc animated:YES];
@@ -374,7 +376,6 @@
         viewTag.imageLabel.labelWaterFlow.text=text;
         viewTag.isImageLabelShow=YES;
         [self clickViewMBP];
-        
         [ws correct:text isPositiveAndNegative:YES];
     };
     [self.viewC.navigationController pushViewController:vc animated:YES];
@@ -387,10 +388,7 @@
         viewTag.imageLabel.labelWaterFlow.text=text;
         viewTag.isImageLabelShow=YES;
         [self clickViewMBP];
-      
         [ws correct:text isPositiveAndNegative:YES];
-        
-        
     };
     [self.viewC.navigationController pushViewController:vc animated:YES];
 }
