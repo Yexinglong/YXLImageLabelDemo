@@ -160,26 +160,14 @@
     [self addtagViewimageClickinit:pointimageScale isAddTagView:YES];
     if(text.length!=0)
         viewTag.imageLabel.labelWaterFlow.text=text;
-    [arrayInitDidView addObject:[NSString stringWithFormat:@"%d",isPositiveAndNegative]];
     
-}
-
-- (void)didMoveToWindow {
-    [self layoutIfNeeded];
-    if (self.window) {
-        if(!isViewDidLoad){
-            isViewDidLoad=YES;
-            for (int i=0; i<arrayInitDidView.count; i++) {
-                NSLog(@"%d",![arrayInitDidView[i] boolValue]);
-                if(![arrayInitDidView[i] boolValue]==YES)
-                {
-                    break;
-                }
-                [self viewTagIsPositiveAndNegative:![arrayInitDidView[i] boolValue] view:arrayTagS[i]];
-            }
-        }
+    if(isPositiveAndNegative==NO){
+        [self layoutIfNeeded];
+        [self viewTagIsPositiveAndNegative:isPositiveAndNegative view:viewTag];
     }
 }
+
+
 
 #pragma -mark 点击创建标签
 -(void)addtagViewimageClickinit:(CGPoint)point isAddTagView:(BOOL)isAdd{
@@ -451,19 +439,28 @@
     CGRect noScale = CGRectMake(0.0, 0.0, _imagePreviews.image.size.width , _imagePreviews.image.size.height );
     if (CGWidth(noScale) <= kWindowWidth && CGHeight(noScale) <= self.frame.size.height) {
         imageScale = 1.0;
-        _imagePreviews.frame= (CGRect){{kWindowWidth/2 -noScale.size.width/2,(kWindowHeight-64) /2 -noScale.size.height/2} ,noScale.size};
+        [_imagePreviews mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.center.equalTo(self);
+            make.size.mas_equalTo(noScale.size);
+        }];
         return ;
     }
     CGRect scaled;
     imageScale= (kWindowHeight-64) / _imagePreviews.image.size.height;
     scaled=CGRectMake(0.0, 0.0, _imagePreviews.image.size.width * imageScale , _imagePreviews.image.size.height * imageScale );
     if (CGWidth(scaled) <= kWindowWidth && CGHeight(scaled) <= (kWindowHeight-64)) {
-        _imagePreviews.frame= (CGRect){{kWindowWidth/2 -scaled.size.width/2,(self.frame.size.height-64) /2 -scaled.size.height/2} ,scaled.size};
+        [_imagePreviews mas_remakeConstraints:^(MASConstraintMaker *make) {
+            make.center.equalTo(self);
+            make.size.mas_equalTo(scaled.size);
+        }];
         return ;
     }
     imageScale = kWindowWidth / _imagePreviews.image.size.width;
     scaled = CGRectMake(0.0, 0.0, _imagePreviews.image.size.width * imageScale, _imagePreviews.image.size.height * imageScale);
-    _imagePreviews.frame=(CGRect){{kWindowWidth/2 -scaled.size.width/2,(kWindowHeight-64) /2 -scaled.size.height/2} ,scaled.size};
+    [_imagePreviews mas_remakeConstraints:^(MASConstraintMaker *make) {
+        make.center.equalTo(self);
+        make.size.mas_equalTo(scaled.size);
+    }];
 }
 
 #pragma -mark pop返回标签尺寸和文本

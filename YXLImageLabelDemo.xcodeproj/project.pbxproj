@@ -39,6 +39,8 @@
 		5BCF3DA71B91A5BC00A4A981 /* pch.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BCF3DA61B91A5BB00A4A981 /* pch.m */; };
 		5BCF3DAA1B91A5F500A4A981 /* NSTimer+Addition.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BCF3DA91B91A5F500A4A981 /* NSTimer+Addition.m */; };
 		5BCF3DB31B91A6FB00A4A981 /* MiYiTagSearchBarVC.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BCF3DB21B91A6FB00A4A981 /* MiYiTagSearchBarVC.m */; };
+		998FC3011DBDC0BF00F1A937 /* testTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 998FC3001DBDC0BF00F1A937 /* testTable.m */; };
+		998FC3041DBDC0D300F1A937 /* testCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 998FC3031DBDC0D300F1A937 /* testCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +114,10 @@
 		5BCF3DA91B91A5F500A4A981 /* NSTimer+Addition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+Addition.m"; sourceTree = "<group>"; };
 		5BCF3DB11B91A6FB00A4A981 /* MiYiTagSearchBarVC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MiYiTagSearchBarVC.h; sourceTree = "<group>"; };
 		5BCF3DB21B91A6FB00A4A981 /* MiYiTagSearchBarVC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MiYiTagSearchBarVC.m; sourceTree = "<group>"; };
+		998FC2FF1DBDC0BF00F1A937 /* testTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testTable.h; sourceTree = "<group>"; };
+		998FC3001DBDC0BF00F1A937 /* testTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = testTable.m; sourceTree = "<group>"; };
+		998FC3021DBDC0D300F1A937 /* testCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testCell.h; sourceTree = "<group>"; };
+		998FC3031DBDC0D300F1A937 /* testCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = testCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,6 +219,10 @@
 				5BCF3D751B91A4DD00A4A981 /* AppDelegate.m */,
 				5BCF3D771B91A4DD00A4A981 /* ViewController.h */,
 				5BCF3D781B91A4DD00A4A981 /* ViewController.m */,
+				998FC2FF1DBDC0BF00F1A937 /* testTable.h */,
+				998FC3001DBDC0BF00F1A937 /* testTable.m */,
+				998FC3021DBDC0D300F1A937 /* testCell.h */,
+				998FC3031DBDC0D300F1A937 /* testCell.m */,
 				5BCF3D7A1B91A4DD00A4A981 /* Main.storyboard */,
 				5BCF3D7D1B91A4DD00A4A981 /* Images.xcassets */,
 				5BCF3D7F1B91A4DD00A4A981 /* LaunchScreen.xib */,
@@ -387,6 +397,8 @@
 				5BCF3DA71B91A5BC00A4A981 /* pch.m in Sources */,
 				5B373BE11BDDC83100A055E0 /* ViewController+MASAdditions.m in Sources */,
 				5B373BDC1BDDC83100A055E0 /* MASViewAttribute.m in Sources */,
+				998FC3041DBDC0D300F1A937 /* testCell.m in Sources */,
+				998FC3011DBDC0BF00F1A937 /* testTable.m in Sources */,
 				5B373BD81BDDC83100A055E0 /* MASCompositeConstraint.m in Sources */,
 				5B373BDA1BDDC83100A055E0 /* MASConstraintMaker.m in Sources */,
 				5B373BD91BDDC83100A055E0 /* MASConstraint.m in Sources */,

@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "YXLTagVC.h"
 #import "pch.h"
+#import "testTable.h"
 @interface ViewController ()
 
 @property (nonatomic ,strong) UILabel *   labbel;
